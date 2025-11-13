@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from db2 import db
+from db import db
 
 app = FastAPI(debug=True)
 
@@ -9,7 +9,7 @@ def get_wydarzenia():
     my_db = db()
     return my_db.get_wydarzenia()
 
-@app.post("/add-wydarzenie")
+@app.post("/wydarzenie")
 async def add_wydarzenie(request: Request):
     wydarzenie_data = await request.json()
     ##"""
@@ -27,3 +27,28 @@ async def add_wydarzenie(request: Request):
     my_db = db()
     result = my_db.add_wydarzenie(wydarzenie_data)
     return JSONResponse(status_code=201, content=result)
+@app.put("/update_wydarzenie")
+async def update_wydarzenie(request: Request):
+    wydarzenie_data = await request.json()
+    # """
+    # Przykładowy payload:
+    # {
+    #     "ID": 1,
+    #     "id_organizatora": 1,
+    #     "id_miejsca": 2,
+    #     "id_rodzaju": 3,
+    #     "nazwa": "Koncert Jazzowy",
+    #     "data": "2025-12-15",
+    #     "godz_zacz": "19:00:00",
+    #     "godz_zak": "23:00:00"
+    # }
+    # """
+    my_db = db()
+    result = my_db.update_wydarzenie(wydarzenie_data)
+    return JSONResponse(status_code=200, content=result)
+@app.delete("/wydarzenie/{id}")
+async def delete_wydarzenie(id, request: Request):
+    wydarzenie_data = await request.json()
+    my_db = db()
+    result = my_db.delete_wydarzenie(id, wydarzenie_data)
+    return JSONResponse(status_code=200, content=result)

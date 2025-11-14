@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql:3306
--- Generation Time: Lis 07, 2025 at 09:19 AM
+-- Generation Time: Lis 14, 2025 at 09:20 AM
 -- Wersja serwera: 9.5.0
 -- Wersja PHP: 8.3.26
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Baza danych: `wydarzenia`
+-- Baza danych: `pythonapp`
 --
 
 -- --------------------------------------------------------
@@ -30,8 +30,16 @@ SET time_zone = "+00:00";
 CREATE TABLE `miejsca` (
   `ID` int NOT NULL,
   `adres` varchar(255) NOT NULL,
-  `miasto` varchar(255) NOT NULL
+  `miasto` varchar(255) NOT NULL,
+  `deleted` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Zrzut danych tabeli `miejsca`
+--
+
+INSERT INTO `miejsca` (`ID`, `adres`, `miasto`, `deleted`) VALUES
+(1, 'Nowa 120', 'Cyganka', 1);
 
 -- --------------------------------------------------------
 
@@ -72,8 +80,16 @@ CREATE TABLE `wydarzenia` (
   `nazwa` varchar(255) NOT NULL,
   `data` varchar(20) NOT NULL,
   `godz_zacz` varchar(10) NOT NULL,
-  `godz_zak` varchar(10) NOT NULL
+  `godz_zak` varchar(10) NOT NULL,
+  `deleted` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Zrzut danych tabeli `wydarzenia`
+--
+
+INSERT INTO `wydarzenia` (`ID`, `id_organizatora`, `id_miejsca`, `id_rodzaju`, `nazwa`, `data`, `godz_zacz`, `godz_zak`, `deleted`) VALUES
+(1, 1, 2, 3, 'Koncert Jazzowy', '2025-12-15', '19:00:00', '23:00:00', 1);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -111,7 +127,7 @@ ALTER TABLE `wydarzenia`
 -- AUTO_INCREMENT dla tabeli `miejsca`
 --
 ALTER TABLE `miejsca`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT dla tabeli `organizatorzy`
@@ -129,7 +145,7 @@ ALTER TABLE `rodzaj`
 -- AUTO_INCREMENT dla tabeli `wydarzenia`
 --
 ALTER TABLE `wydarzenia`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

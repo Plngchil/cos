@@ -5,12 +5,12 @@ info:
 servers:
   - url: http://localhost:9000
 paths:
-  /get-users:
+  /get-wydarzenia:
     get:
-      summary: Pobiera listę użytkowników
+      summary: Pobiera listę wydarzeń
       responses:
         '200':
-          description: Lista użytkowników w formacie json
+          description: Lista wydarzeń w formacie json
           content:
             application/json:
               schema:
@@ -18,18 +18,36 @@ paths:
                 items:
                   type: object
                   properties:
-                    email:
+                    id_organizatora:
+                      type: integer
+                    id_miejsca:
+                      type: integer
+                    id_rodzaju:
+                      type: integer
+                    nazwa:
+                      type: string  
+                    data:
+                      type: number
+                      format: date
+                    godzina_zacz:
                       type: string
-                      format: email
-                    name:
+                    godzina_zak:
                       type: string
+                    deleted:
+                      type: integer
                   required:
-                    - email
-                    - name
-  /add-user:
+                    - id_organizatora
+                    - id_miejsca
+                    - id_rodzaju
+                    - nazwa
+                    - data
+                    - godzina_zacz
+                    - godzina_zak
+                    - deleted
+  /wydarzenie:
     post:
-      summary: Add a new user
-      description: Inserts a new user into the database.
+      summary: Dodaje nowe wydarzenie
+      description: Endpoint do dodawania nowego wydarzenia do bazy danych
       requestBody:
         required: true
         content:
@@ -37,19 +55,43 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                id_organizatora:
+                  type: integer
+                  example: "1"
+                id_miejsca:
+                  type: integer
+                  example: "2"
+                id_rodzaju:
+                  type: integer
+                  example: "3"
+                nazwa:
                   type: string
-                  example: "Jan Kowalski"
-                email:
+                  example: "Koncert Rockowy"
+                data:
                   type: string
-                  format: email
-                  example: "jan@example.com"
+                  format: date
+                  example: "2024-12-31"
+                godzina_zacz:
+                  type: string
+                  example: "19:00:00"
+                godz_zak:
+                  type: string
+                  example: "22:00:00"
+                deleted:
+                  type: integer
+                  example: 0
               required:
-                - name
-                - email
+                - id_organizatora
+                - id_miejsca
+                - id_rodzaju
+                - nazwa
+                - data
+                - godzina_zacz
+                - godz_zak
+                - deleted
       responses:
         "200":
-          description: Użytkownik został pomyślnie dodany
+          description: Wydarzenie zostało pomyślnie dodane
           content:
             application/json:
               schema:
@@ -59,10 +101,100 @@ paths:
                     type: string
                     example: "OK"
                   added_id:
-                    description: Id dodanego użytkownika
+                    description: Id dodanego wydarzenia
                     type: integer
                     example: 12
         "400":
           description: Invalid input
         "500":
           description: Internal server error                    
+  /update_wydarzenie:
+    put:
+      summary: Aktualizuje istniejące wydarzenie
+      description: Endpoint do aktualizacji istniejącego wydarzenia w bazie danych
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_organizatora:
+                  type: integer
+                  example: "1"
+                id_miejsca:
+                  type: integer
+                  example: "2"
+                id_rodzaju:
+                  type: integer
+                  example: "3"
+                nazwa:
+                  type: string
+                  example: "Koncert Rockowy"
+                data:
+                  type: string
+                  format: date
+                  example: "2024-12-31"
+                godzina_zacz:
+                  type: string
+                  example: "19:00:00"
+                godz_zak:
+                  type: string
+                  example: "22:00:00"
+                deleted:
+                  type: integer
+                  example: 0
+              required:
+                - id_organizatora
+                - id_miejsca
+                - id_rodzaju
+                - nazwa
+                - data
+                - godzina_zacz
+                - godz_zak
+                - deleted
+      responses:
+        "200":
+          description: Wydarzenie zostało pomyślnie zaktualizowane
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+        "400":
+          description: Invalid input
+        "500":
+          description: Internal server error
+  /wydarzenie/{id}:
+    delete:
+      summary: Usuwa istniejące wydarzenie
+      description: Endpoint do usuwania istniejącego wydarzenia z bazy danych. Soft delete - ustawienie pola deleted = 1.
+      parameters:
+        - name: id
+          in: path
+          description: ID wydarzenia do usunięcia
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Wydarzenie zostało pomyślnie usunięte
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+                  updated_rows:
+                    type: integer
+                    example: 1
+        "404":
+          description: Nie znaleziono wydarzenia
+        "500":
+          description: Internal server error

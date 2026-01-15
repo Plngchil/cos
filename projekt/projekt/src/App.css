@@ -62,6 +62,11 @@ th:hover, td:hover{
   background-color: #f0f0f0;
   transition: background-color 0.3s ease-in-out;
 }
+.BtnDodajContainer{
+  text-align: center;
+  margin-bottom: 32px;
+  float: right;
+}
 .Footer{
   text-align: center;
   padding: 16px 0;

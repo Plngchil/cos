@@ -6,6 +6,15 @@ import Modal from 'react-bootstrap/Modal';
 function App() {
   const [show, setShow] = useState(false);
   const [adminMode, setAdminMode] = useState(false);
+  const [wydarzenia, setWydarzenia] = useState([
+    {
+      nazwa: "Przykładowe wydarzenie",
+      data: "2024-01-01",
+      miejsce: "Centrum miasta",
+      godzinaRozpoczecia: "18:00",
+      godzinaZakonczenia: "22:00"
+    }
+  ]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -13,6 +22,46 @@ function App() {
   const wlaczAdministratora = () => setAdminMode(true);
   const wylaczAdministratora = () => setAdminMode(false);
 
+  const edytowanie = () => {
+    alert("Edytowano wydarzenie");
+  }
+
+  const dodawanie = () => {
+    const nazwa = prompt("Nazwa wydarzenia:");
+    const data = prompt("Data:");
+    const miejsce = prompt("Miejsce:");
+    const godzinaRozpoczecia = prompt("Godzina rozpoczęcia:");
+    const godzinaZakonczenia = prompt("Godzina zakończenia:");
+    
+
+    let newWydarzenie = [...wydarzenia, {
+      nazwa,
+      data,
+      miejsce,
+      godzinaRozpoczecia,
+      godzinaZakonczenia
+    }];
+        if (nazwa  && data && miejsce && godzinaRozpoczecia && godzinaZakonczenia) {
+      alert("Dodano wydarzenie");
+      setWydarzenia(newWydarzenie); 
+    } else {
+      alert("Anulowano dodawanie wydarzenia");
+    }
+
+
+  }
+    const usuwanie = () => {
+    const nazwa = prompt("Podaj nazwę wydarzenia do usunięcia:");
+    const index = wydarzenia.findIndex(w => w.nazwa === nazwa);
+      console.log(index);
+    if (index >= 0 && index < wydarzenia.length) {
+      const newWydarzenia = wydarzenia.filter((_, i) => i !== index);
+      setWydarzenia(newWydarzenia);
+    } else {
+      alert("Nieprawidłowy numer wydarzenia");
+      return;
+    }
+  }
   return (
     <>
       <style>
@@ -49,14 +98,20 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>a </td>
-              <td>a</td>
-              <td>a</td>
-              <td>a</td>
-              <td>a</td>
-              <td><Button variant="primary" onClick={handleShow} className="BtnSzczegoly">Szczegóły</Button></td>
-            </tr>
+            {wydarzenia.map((wydarzenie, index) => (
+              <tr key={index}>
+                <td>{wydarzenie.nazwa}</td>
+                <td>{wydarzenie.data}</td>
+                <td>{wydarzenie.miejsce}</td>
+                <td>{wydarzenie.godzinaRozpoczecia}</td>
+                <td>{wydarzenie.godzinaZakonczenia}</td>
+                <td>
+                <Button variant="primary" onClick={handleShow} className="BtnSzczegoly">Szczegóły</Button>
+                <Button variant='success' onClick={edytowanie}style={{display: adminMode ? 'inline-block' : 'none', margin: adminMode ? '0 5px' : '0' }} className="BtnEdytuj">Edytuj</Button>
+                <Button variant='danger' onClick={usuwanie} style={{display: adminMode ? 'inline-block' : 'none', margin: adminMode ? '0 5px' : '0'}} className="BtnUsun">Usuń</Button>
+              </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Modal
@@ -76,8 +131,11 @@ function App() {
           <Button variant="success" onClick={handleClose}>Understood</Button>
         </Modal.Footer>
       </Modal>
-      <Button variant="primary" className='BtnAdmin' style={{visibility: adminMode ? 'hidden' : 'visible'}} onClick={wlaczAdministratora}>Włącz tryb administratora</Button>
-      <Button variant="danger" className='BtnAdmin2' style={{visibility: adminMode ? 'visible' : 'hidden'}} onClick={wylaczAdministratora}>Wyłącz tryb administratora</Button>
+      <Button variant="primary" className='BtnAdmin' style={{display: adminMode ? 'none' : 'inline-block'}} onClick={wlaczAdministratora}>Włącz tryb administratora</Button>
+      <Button variant="danger" className='BtnAdmin2' style={{display: adminMode ? 'inline-block' : 'none'}} onClick={wylaczAdministratora}>Wyłącz tryb administratora</Button>
+      <div className="BtnDodajContainer">
+      <Button variant='primary' className="BtnDodaj" onClick={dodawanie} style={{display: adminMode ? 'inline-block' : 'none'}}>Dodaj wydarzenie</Button>
+      </div>
       </div>
       <div className="Footer">
         <p>
